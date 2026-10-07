@@ -1,0 +1,65 @@
+##############################################
+Install AWS CLI, kubectl आणि eksctl
+##############################################
+
+make    script.sh  >> chmod +x script.sh >>  ./script.sh
+
+-----------------------------------------------------------------------------------------------------------------------
+
+sudo apt update
+sudo apt install -y curl unzip tar gzip
+
+# AWS CLI - Latest Version
+curl -fsSL https://awscli.amazonaws.com/v2/install.sh | sudo bash -s -- --system
+aws --version
+
+# kubectl - Latest Stable Version
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+
+# eksctl - Latest Version
+ARCH=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
+PLATFORM=$(uname -s)_$ARCH
+
+curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+tar -xzf "eksctl_$PLATFORM.tar.gz" -C /tmp
+rm "eksctl_$PLATFORM.tar.gz"
+
+sudo install -m 0755 /tmp/eksctl /usr/local/bin/eksctl
+rm /tmp/eksctl
+
+eksctl version
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+Setup EKS Cluster
+-----------------------------------------------------------------------------------------
+eksctl create cluster \
+  --name aniket-cluster \
+  --region ap-south-1 \
+  --node-type c7i-flex.large \
+  --nodes 2 \
+  --nodes-min 2 \
+  --nodes-max 2 \
+  --zones ap-south-1a,ap-south-1b
+------------------------------------------------------------------------------------------
+
+
+Verify Cluster
+---------------------------------------------------------------------------------------
+eksctl get cluster --region ap-south-1
+
+eksctl get nodegroup \
+  --cluster aniket-cluster \
+  --region ap-south-1
+
+aws eks update-kubeconfig \
+  --region ap-south-1 \
+  --name aniket-cluster
+
+kubectl get nodes
+---------------------------------------------------------------------------------------- 
+
