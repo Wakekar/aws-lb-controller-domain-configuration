@@ -44,7 +44,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 
 🔹 STEP 2 — Setup EKS Cluster
-				eksctl create cluster --name kastro-cluster --region ap-south-1 --node-type t2.medium  --zones ap-south-1a,ap-south-1b
+				eksctl create cluster --name aniket-cluster --region ap-south-1 --node-type t2.medium  --zones ap-south-1a,ap-south-1b
 
 🔹 STEP 3 — Install Docker
 				Build Images, Push Images
